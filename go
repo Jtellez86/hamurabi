@@ -16,11 +16,17 @@ function clean {
 }
 
 function build {
+  echo '******Building*******'
+  gradle build;
+}
+
+function precommit {
   echo '******Checking travis config syntax*******'
   travis lint;
   echo '******Building*******'
   gradle build;
 }
+
 
 [[ $@ ]] || { help; exit 1; }
 
@@ -28,5 +34,7 @@ case "$1" in
     build) build
     ;;
     clean) clean
+    ;;
+    precommit) precommit
     ;;
 esac
