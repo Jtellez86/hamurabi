@@ -1,3 +1,5 @@
+package calculators;
+
 import java.util.Random;
 
 public class RatLossCalculator {
