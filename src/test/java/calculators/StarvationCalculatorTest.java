@@ -12,7 +12,7 @@ public class StarvationCalculatorTest {
   @Test
   public void shouldReturnZeroDeathsFromStarvation() {
 
-    Integer diedOfStarvation  = calculator.calculate(100, 2000);
+    Integer diedOfStarvation  = calculator.calculateDeaths(100, 2000);
 
     assertThat(diedOfStarvation).isEqualTo(0);
 
@@ -20,14 +20,14 @@ public class StarvationCalculatorTest {
 
   @Test
   public void shouldReturn10DeathsFromStarvation() {
-    Integer diedOfStarvation  = calculator.calculate(20, 200);
+    Integer diedOfStarvation  = calculator.calculateDeaths(20, 200);
 
     assertThat(diedOfStarvation).isEqualTo(10);
   }
 
   @Test
   public void shouldReturn0WithExcessRations() {
-    Integer diedOfStarvation  = calculator.calculate(1, 30);
+    Integer diedOfStarvation  = calculator.calculateDeaths(1, 30);
 
     assertThat(diedOfStarvation).isEqualTo(0);
   }
