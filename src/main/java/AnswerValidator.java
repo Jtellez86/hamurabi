@@ -1,5 +1,5 @@
 public class AnswerValidator {
-  public boolean isValidSavingsAmount(Integer bushelsToBeSaved, City city) {
-    return bushelsToBeSaved < city.getBushelCount();
+  public boolean isValidAmount(Integer bushelsRequested, Integer bushelsAvailable) {
+    return bushelsRequested <= bushelsAvailable;
   }
 }

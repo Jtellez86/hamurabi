@@ -9,4 +9,8 @@ public class City {
   public Integer getBushelCount() {
     return bushelCount;
   }
+
+  public void setBushelCount(Integer bushelCount) {
+    this.bushelCount = bushelCount;
+  }
 }

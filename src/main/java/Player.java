@@ -6,7 +6,7 @@ public class Player {
     this.city = city;
   }
 
-  public void setBushelsToSave(Integer bushelsToSave) {
+  public void setBushelsToEat(Integer bushelsToSave) {
     this.bushelsToSave = bushelsToSave;
   }
 

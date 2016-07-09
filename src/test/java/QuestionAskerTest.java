@@ -1,4 +1,3 @@
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -8,9 +7,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -23,32 +20,51 @@ public class QuestionAskerTest {
 
   QuestionAsker asker;
   Player player;
-  @Before
-  public void setUp() throws Exception {
-    player = new Player(new City(15));
-
-  }
 
   @Test
-  public void shouldAskHowManyBushelsToSave() throws Exception {
+  public void shouldAskHowManyBushelsToUseAsFood() throws Exception {
+    player = new Player(new City(10));
     when(mockInputStream.read()).thenReturn(10);
 
     asker = new QuestionAsker(mockInputStream, System.out);
 
-    asker.ask(player, "How many bushels do you wish to feed your people?");
+    asker.askHowMuchToUseForFood(player);
 
     assertThat(player.getBushelsToSave()).isEqualTo(10);
+    assertThat(player.getCity().getBushelCount()).isEqualTo(0);
   }
 
   @Test
-  public void shouldAskForCorrectionIfInputIsInvalid() throws Exception {
+  public void shouldAskForCorrectionIfHowMuchAsFoodInputIsInvalid() throws Exception {
+    player = new Player(new City(10));
     when(mockInputStream.read()).thenReturn(20, 15, 10);
     asker = new QuestionAsker(mockInputStream, mockPrintStream);
 
-    asker.ask(player, "How many bushels do you wish to feed your people?");
+    asker.askHowMuchToUseForFood(player);
 
     verify(mockPrintStream, times(3)).println("How many bushels do you wish to feed your people?");
+  }
 
+  @Test
+  public void shouldAskHowMuchToPlant() throws Exception {
+    player = new Player(new City(50));
+    when(mockInputStream.read()).thenReturn(20);
+    asker = new QuestionAsker(mockInputStream, mockPrintStream);
+
+    asker.askHowMuchToPlant(player);
+
+    assertThat(player.getCity().getBushelCount()).isEqualTo(30);
+  }
+
+  @Test
+  public void shouldAskHowMuchToPlantTwiceIfAnswerIsInvalid() throws Exception {
+    player = new Player(new City(10));
+    when(mockInputStream.read()).thenReturn(20, 15, 10);
+    asker = new QuestionAsker(mockInputStream, mockPrintStream);
+
+    asker.askHowMuchToPlant(player);
+
+    verify(mockPrintStream, times(3)).println("How many acres do you wish to plant with seed?");
   }
 
 }
