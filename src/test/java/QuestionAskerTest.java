@@ -43,6 +43,7 @@ public class QuestionAskerTest {
     asker.askHowMuchToUseForFood(player);
 
     verify(mockPrintStream, times(3)).println("How many bushels do you wish to feed your people?");
+    verify(mockPrintStream, times(2)).printf("Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n", 10);
   }
 
   @Test
@@ -65,6 +66,6 @@ public class QuestionAskerTest {
     asker.askHowMuchToPlant(player);
 
     verify(mockPrintStream, times(3)).println("How many acres do you wish to plant with seed?");
+    verify(mockPrintStream, times(2)).printf("Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n", 10);
   }
-
 }

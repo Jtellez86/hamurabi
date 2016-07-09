@@ -6,6 +6,7 @@ import java.io.PrintStream;
 public class QuestionAsker {
   public static final String FOOD_QUESTION = "How many bushels do you wish to feed your people?";
   public static final String PLANT_QUESTION = "How many acres do you wish to plant with seed?";
+  public static final String CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n";
   private final InputStream inputStream;
   private final PrintStream output;
   private final AnswerValidator answerValidator;
@@ -21,6 +22,7 @@ public class QuestionAsker {
     output.println(FOOD_QUESTION);
     Integer bushelsToEat = inputStream.read();
     while(!answerValidator.isValidAmount(bushelsToEat, player.getCity().getBushelCount())){
+      output.printf(CORRECTION_MESSAGE, player.getCity().getBushelCount());
       output.println(FOOD_QUESTION);
       bushelsToEat = inputStream.read();
     }
@@ -33,6 +35,7 @@ public class QuestionAsker {
     output.println(PLANT_QUESTION);
     Integer bushelsToPlant = inputStream.read();
     while(!answerValidator.isValidAmount(bushelsToPlant, player.getCity().getBushelCount())){
+      output.printf(CORRECTION_MESSAGE, player.getCity().getBushelCount());
       output.println(PLANT_QUESTION);
       bushelsToPlant = inputStream.read();
     }
