@@ -1,5 +1,3 @@
-package calculators;
-
 import java.io.PrintStream;
 
 public class StarvationCalculator {
