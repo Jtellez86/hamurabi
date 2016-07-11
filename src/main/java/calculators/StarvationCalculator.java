@@ -1,8 +1,16 @@
 package calculators;
 
+import java.io.PrintStream;
+
 public class StarvationCalculator {
 
-  public static final int BUSHELS_PER_PERSON = 20;
+  private final int BUSHELS_PER_PERSON = 20;
+  private final PrintStream output;
+
+  public StarvationCalculator(PrintStream output) {
+    this.output = output;
+  }
+
 
   public Integer calculateDeaths(Integer citizens, Integer bushels) {
     Integer totalDead = 0;
@@ -13,6 +21,7 @@ public class StarvationCalculator {
 
     if(isShortage(result)){
       totalDead = -(result)/BUSHELS_PER_PERSON;
+      output.printf("You starved %d people in one year!!!%n", totalDead);
     }
 
     return totalDead;
