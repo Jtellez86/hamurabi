@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class BushelTraderTest {
 
   @Mock
-  RandomnessCalculator randomnessCalculator;
+  RandomnessCalculator mockedRandomnessCalculator;
 
   @Mock
   PrintStream mockedPrintStream;
@@ -26,24 +26,24 @@ public class BushelTraderTest {
 
   @Test
   public void shouldAddBushelsFromSellingLandToBushelSurplus() throws InvalidAcreagePurchaseException {
-    when(randomnessCalculator.calculateRandomnessBetween(17, 26)).thenReturn(20);
+    when(mockedRandomnessCalculator.calculateRandomnessBetween(17, 26)).thenReturn(20);
     city = new City(10);
-    trader = new BushelTrader(city, randomnessCalculator);
+    trader = new BushelTrader(mockedRandomnessCalculator);
 
-    trader.sellLand(5);
+    trader.useLandToBuyBushels(20, city);
 
-    assertThat(city.getAcreage()).isEqualTo(995);
-    assertThat(city.getBushelCount()).isEqualTo(110);
+    assertThat(city.getAcreage()).isEqualTo(999);
+    assertThat(city.getBushelCount()).isEqualTo(30);
     verify(mockedPrintStream, times(0)).println(anyString());
   }
 
   @Test
   public void shouldRemoveBushelsFromSurplusWhenBuyingLand() throws InvalidAcreagePurchaseException {
-    when(randomnessCalculator.calculateRandomnessBetween(17, 26)).thenReturn(20);
+    when(mockedRandomnessCalculator.calculateRandomnessBetween(17, 26)).thenReturn(20);
 
     city = new City(20);
-    trader = new BushelTrader(city, randomnessCalculator);
-    trader.sellBushels(20f);
+    trader = new BushelTrader(mockedRandomnessCalculator);
+    trader.useBushelsToBuyLand(20f, city);
 
     assertThat(city.getAcreage()).isEqualTo(1001);
     assertThat(city.getBushelCount()).isEqualTo(0);
@@ -52,11 +52,11 @@ public class BushelTraderTest {
 
   @Test(expected = InvalidAcreagePurchaseException.class)
   public void shouldNotRemoveBushelsFromSurplusWhenBuyingLandWithLessThanCostOfAcre() throws InvalidAcreagePurchaseException {
-    when(randomnessCalculator.calculateRandomnessBetween(17, 26)).thenReturn(20);
+    when(mockedRandomnessCalculator.calculateRandomnessBetween(17, 26)).thenReturn(20);
 
     city = new City(20);
-    trader = new BushelTrader(city, randomnessCalculator);
-    trader.sellBushels(19f);
+    trader = new BushelTrader(mockedRandomnessCalculator);
+    trader.useBushelsToBuyLand(19f, city);
 
     assertThat(city.getAcreage()).isEqualTo(1000);
     assertThat(city.getBushelCount()).isEqualTo(20);

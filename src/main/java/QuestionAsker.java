@@ -1,3 +1,5 @@
+import exceptions.InvalidAcreagePurchaseException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -7,14 +9,17 @@ public class QuestionAsker {
   public static final String FOOD_QUESTION = "How many bushels do you wish to feed your people?";
   public static final String PLANT_QUESTION = "How many acres do you wish to plant with seed?";
   public static final String CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n";
+  public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(in bushels, enter a negative amount to sell bushels)";
   private final InputStream inputStream;
   private final PrintStream output;
   private final AnswerValidator answerValidator;
+  private BushelTrader trader;
 
-  QuestionAsker(InputStream in, PrintStream out){
+  QuestionAsker(InputStream in, PrintStream out, RandomnessCalculator calculator){
     this.inputStream = in;
     this.output = out;
     this.answerValidator = new AnswerValidator();
+    this.trader = new BushelTrader(calculator);
   }
 
 
@@ -41,4 +46,20 @@ public class QuestionAsker {
     }
     player.getCity().setBushelCount(player.getCity().getBushelCount() - bushelsToPlant);
   }
+
+  public void askHowMuchLandToTrade(Player player) throws IOException {
+    output.println(LAND_QUESTION);
+    Integer bushelsToTrade = inputStream.read();
+
+    if(bushelsToTrade < 0) {
+      try {
+        trader.useBushelsToBuyLand((float)Math.abs(bushelsToTrade), player.getCity());
+      } catch (InvalidAcreagePurchaseException e) {
+        e.printStackTrace();
+      }
+    }
+    else {
+        trader.useLandToBuyBushels(bushelsToTrade, player.getCity());
+      }
+    }
 }

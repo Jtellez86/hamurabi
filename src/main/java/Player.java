@@ -1,17 +1,17 @@
 public class Player {
-  private Integer bushelsToSave = 0;
+  private Integer bushelsForFood = 0;
   private City city;
 
   public Player(City city){
     this.city = city;
   }
 
-  public void setBushelsToEat(Integer bushelsToSave) {
-    this.bushelsToSave = bushelsToSave;
+  public void setBushelsToEat(Integer bushelsForFood) {
+    this.bushelsForFood = bushelsForFood;
   }
 
-  public Integer getBushelsToSave() {
-    return bushelsToSave;
+  public Integer getBushelsForFood() {
+    return bushelsForFood;
   }
 
   public City getCity() {
