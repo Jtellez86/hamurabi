@@ -13,16 +13,23 @@ public class EndGameCalculatorTest {
   }
 
   @Test
-  public void shouldDetermineYouAreUnfitRulerIfPopulationIsWipedOut() throws Exception {
+  public void shouldLoseIfPopulationIsWipedOut() throws Exception {
     City city = new City(10);
 
     assertThat(calculator.isGameOver(city, 100)).isTrue();
   }
 
   @Test
-  public void shouldDetermineYouAreUnfitRulerIfPopulationIs45PercentIsLost() throws Exception {
+  public void shouldLoseIfPopulationIs45PercentIsLost() throws Exception {
     City city = new City(10);
 
     assertThat(calculator.isGameOver(city, 45)).isTrue();
+  }
+
+  @Test
+  public void shouldContinueIfPopulationHasNotLost45PercentOfPopulation() throws Exception {
+    City city = new City(10);
+
+    assertThat(calculator.isGameOver(city, 44)).isFalse();
   }
 }
