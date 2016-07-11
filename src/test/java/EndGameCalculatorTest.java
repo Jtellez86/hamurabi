@@ -1,3 +1,4 @@
+import exceptions.TerribleRulerException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,22 +13,22 @@ public class EndGameCalculatorTest {
 
   }
 
-  @Test
-  public void shouldLoseIfPopulationIsWipedOut() throws Exception {
+  @Test(expected = TerribleRulerException.class)
+  public void shouldLoseIfPopulationIsWipedOut() throws TerribleRulerException {
     City city = new City(10);
 
     assertThat(calculator.isGameOver(city, 100)).isTrue();
   }
 
-  @Test
-  public void shouldLoseIfPopulationIs45PercentIsLost() throws Exception {
+  @Test(expected = TerribleRulerException.class)
+  public void shouldLoseIfPopulationIs45PercentIsLost() throws TerribleRulerException {
     City city = new City(10);
 
     assertThat(calculator.isGameOver(city, 45)).isTrue();
   }
 
   @Test
-  public void shouldContinueIfPopulationHasNotLost45PercentOfPopulation() throws Exception {
+  public void shouldContinueIfPopulationHasNotLost45PercentOfPopulation() throws TerribleRulerException {
     City city = new City(10);
 
     assertThat(calculator.isGameOver(city, 44)).isFalse();
