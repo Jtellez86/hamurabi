@@ -13,12 +13,16 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class QuestionAskerTest {
 
-  public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(in bushels, enter a negative amount to sell bushels)";
-  public static final String CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n";
+  public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
+  public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n";
+  public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, %n";
+
   @Mock
   InputStream mockInputStream;
+
   @Mock
   PrintStream mockPrintStream;
+
   @Mock
   RandomnessCalculator calculator;
 
@@ -39,7 +43,7 @@ public class QuestionAskerTest {
   }
 
   @Test
-  public void shouldAskForCorrectionIfHowMuchAsFoodInputIsInvalid() throws Exception {
+  public void shouldAskHowMuchToUseAsFoodIfAnswerIsInvalid() throws Exception {
     player = new Player(new City(10));
     when(mockInputStream.read()).thenReturn(20, 15, 10);
     asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
@@ -70,13 +74,13 @@ public class QuestionAskerTest {
     asker.askHowMuchToPlant(player);
 
     verify(mockPrintStream, times(3)).println("How many acres do you wish to plant with seed?");
-    verify(mockPrintStream, times(2)).printf("Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n", 10);
+    verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
   }
 
   @Test
-  public void shouldAskPlayerToSellOrBuyLandPlayerChoosesToBuyBushels() throws Exception {
+  public void shouldAskPlayerToSellOrBuyLandPlayerChoosesSellAcreage() throws Exception {
     player = new Player(new City(20));
-    when(mockInputStream.read()).thenReturn(20);
+    when(mockInputStream.read()).thenReturn(-1);
     when(calculator.calculateRandomnessBetween(17,26)).thenReturn(20);
     asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
 
@@ -89,43 +93,28 @@ public class QuestionAskerTest {
   }
 
   @Test
-  public void shouldAskPlayerToSellOrBuyLandPlayerChoosesToSellBushels() throws Exception {
+  public void shouldAskHowMuchToTradeAgainWhenGivenIncorrectPositiveAmount() throws Exception {
     player = new Player(new City(20));
-    when(mockInputStream.read()).thenReturn(-20);
-    when(calculator.calculateRandomnessBetween(17,26)).thenReturn(20);
-    asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
-
-    asker.askHowMuchLandToTrade(player);
-
-    assertThat(player.getCity().getBushelCount()).isEqualTo(0);
-    assertThat(player.getCity().getAcreage()).isEqualTo(1001);
-
-    verify(mockPrintStream).println(LAND_QUESTION);
-  }
-
-  @Test
-  public void shouldAskHowMuchToTradeAgainWhenGivenIncorrectAmount() throws Exception {
-    player = new Player(new City(20));
-    when(mockInputStream.read()).thenReturn(30, 25, 20);
+    when(mockInputStream.read()).thenReturn(1010, 1005, 1000);
     when(calculator.calculateRandomnessBetween(17,26)).thenReturn(20);
     asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
 
     asker.askHowMuchLandToTrade(player);
 
     verify(mockPrintStream, times(3)).println(LAND_QUESTION);
-    verify(mockPrintStream, times(2)).printf(CORRECTION_MESSAGE, 20);
+    verify(mockPrintStream, times(2)).printf(ACREAGE_CORRECTION_MESSAGE, 1000);
   }
 
   @Test
   public void shouldAskHowMuchToTradeAgainWhenGivenIncorrectNegativeAmount() throws Exception {
     player = new Player(new City(20));
-    when(mockInputStream.read()).thenReturn(-30, -25, -20);
+    when(mockInputStream.read()).thenReturn(-1010, -1005, -1000);
     when(calculator.calculateRandomnessBetween(17,26)).thenReturn(20);
     asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
 
     asker.askHowMuchLandToTrade(player);
 
     verify(mockPrintStream, times(3)).println(LAND_QUESTION);
-    verify(mockPrintStream, times(2)).printf("Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n", 20);
+    verify(mockPrintStream, times(2)).printf(ACREAGE_CORRECTION_MESSAGE, 1000);
   }
 }

@@ -10,7 +10,7 @@ public class AnswerValidatorTest {
 
     AnswerValidator service = new AnswerValidator();
 
-    boolean isValidSavingsAmount = service.isValidAmount(20, city.getBushelCount());
+    boolean isValidSavingsAmount = service.doesCityHaveTheResources(20, city.getBushelCount());
     assertThat(isValidSavingsAmount).isTrue();
   }
 }
