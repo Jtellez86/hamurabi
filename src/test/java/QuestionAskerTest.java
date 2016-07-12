@@ -14,6 +14,7 @@ import static org.mockito.Mockito.*;
 public class QuestionAskerTest {
 
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(in bushels, enter a negative amount to sell bushels)";
+  public static final String CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n";
   @Mock
   InputStream mockInputStream;
   @Mock
@@ -61,7 +62,7 @@ public class QuestionAskerTest {
   }
 
   @Test
-  public void shouldAskHowMuchToPlantTwiceIfAnswerIsInvalid() throws Exception {
+  public void shouldAskHowMuchToPlantAgainIfAnswerIsInvalid() throws Exception {
     player = new Player(new City(10));
     when(mockInputStream.read()).thenReturn(20, 15, 10);
     asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
@@ -100,5 +101,31 @@ public class QuestionAskerTest {
     assertThat(player.getCity().getAcreage()).isEqualTo(1001);
 
     verify(mockPrintStream).println(LAND_QUESTION);
+  }
+
+  @Test
+  public void shouldAskHowMuchToTradeAgainWhenGivenIncorrectAmount() throws Exception {
+    player = new Player(new City(20));
+    when(mockInputStream.read()).thenReturn(30, 25, 20);
+    when(calculator.calculateRandomnessBetween(17,26)).thenReturn(20);
+    asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
+
+    asker.askHowMuchLandToTrade(player);
+
+    verify(mockPrintStream, times(3)).println(LAND_QUESTION);
+    verify(mockPrintStream, times(2)).printf(CORRECTION_MESSAGE, 20);
+  }
+
+  @Test
+  public void shouldAskHowMuchToTradeAgainWhenGivenIncorrectNegativeAmount() throws Exception {
+    player = new Player(new City(20));
+    when(mockInputStream.read()).thenReturn(-30, -25, -20);
+    when(calculator.calculateRandomnessBetween(17,26)).thenReturn(20);
+    asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
+
+    asker.askHowMuchLandToTrade(player);
+
+    verify(mockPrintStream, times(3)).println(LAND_QUESTION);
+    verify(mockPrintStream, times(2)).printf("Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n", 20);
   }
 }

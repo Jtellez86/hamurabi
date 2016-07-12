@@ -31,7 +31,6 @@ public class BushelTrader {
     return bushelsToSell/bushelsPerAcre;
   }
 
-  //need to consider case where amount is greater than max in either direction (+/-)
   private boolean isBushelsSoldValidAmount(Float bushelsToSell, Float bushelsPerAcre) {
     return bushelsToSell % bushelsPerAcre == 0;
   }

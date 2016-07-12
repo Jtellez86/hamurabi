@@ -15,7 +15,7 @@ public class QuestionAsker {
   private final AnswerValidator answerValidator;
   private BushelTrader trader;
 
-  QuestionAsker(InputStream in, PrintStream out, RandomnessCalculator calculator){
+  QuestionAsker(InputStream in, PrintStream out, RandomnessCalculator calculator) {
     this.inputStream = in;
     this.output = out;
     this.answerValidator = new AnswerValidator();
@@ -26,20 +26,20 @@ public class QuestionAsker {
   public void askHowMuchToUseForFood(Player player) throws IOException {
     output.println(FOOD_QUESTION);
     Integer bushelsToEat = inputStream.read();
-    while(!answerValidator.isValidAmount(bushelsToEat, player.getCity().getBushelCount())){
+    while (!answerValidator.isValidAmount(bushelsToEat, player.getCity().getBushelCount())) {
       output.printf(CORRECTION_MESSAGE, player.getCity().getBushelCount());
       output.println(FOOD_QUESTION);
       bushelsToEat = inputStream.read();
     }
-      player.setBushelsToEat(bushelsToEat);
-      player.getCity().setBushelCount(player.getCity().getBushelCount() - bushelsToEat);
+    player.setBushelsToEat(bushelsToEat);
+    player.getCity().setBushelCount(player.getCity().getBushelCount() - bushelsToEat);
   }
 
 
   public void askHowMuchToPlant(Player player) throws IOException {
     output.println(PLANT_QUESTION);
     Integer bushelsToPlant = inputStream.read();
-    while(!answerValidator.isValidAmount(bushelsToPlant, player.getCity().getBushelCount())){
+    while (!answerValidator.isValidAmount(bushelsToPlant, player.getCity().getBushelCount())) {
       output.printf(CORRECTION_MESSAGE, player.getCity().getBushelCount());
       output.println(PLANT_QUESTION);
       bushelsToPlant = inputStream.read();
@@ -51,15 +51,19 @@ public class QuestionAsker {
     output.println(LAND_QUESTION);
     Integer bushelsToTrade = inputStream.read();
 
-    if(bushelsToTrade < 0) {
+    while (!answerValidator.isValidAmount(Math.abs(bushelsToTrade), player.getCity().getBushelCount())) {
+      output.printf(CORRECTION_MESSAGE, player.getCity().getBushelCount());
+      output.println(LAND_QUESTION);
+      bushelsToTrade = inputStream.read();
+    }
+    if (bushelsToTrade < 0) {
       try {
-        trader.useBushelsToBuyLand((float)Math.abs(bushelsToTrade), player.getCity());
+        trader.useBushelsToBuyLand((float) Math.abs(bushelsToTrade), player.getCity());
       } catch (InvalidAcreagePurchaseException e) {
         e.printStackTrace();
       }
+    } else {
+      trader.useLandToBuyBushels(bushelsToTrade, player.getCity());
     }
-    else {
-        trader.useLandToBuyBushels(bushelsToTrade, player.getCity());
-      }
-    }
+  }
 }
