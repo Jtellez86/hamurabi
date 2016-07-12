@@ -1,5 +1,7 @@
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 import static java.lang.Integer.parseInt;
@@ -11,27 +13,51 @@ public class QuestionAsker {
   public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
   public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
-  private final InputStream inputStream;
+
+  private InputStream inputStream;
+  private BufferedReader bufferedReader;
+
   private final PrintStream output;
   private BushelTrader trader;
 
   QuestionAsker(InputStream in, PrintStream out, RandomnessCalculator calculator) {
     this.inputStream = in;
+    this.bufferedReader = new BufferedReader(new InputStreamReader(in));
     this.output = out;
     this.trader = new BushelTrader(calculator);
   }
 
+  QuestionAsker(BufferedReader bufferedReader, PrintStream out, RandomnessCalculator calculator) {
+    this.bufferedReader = bufferedReader;
+    this.output = out;
+    this.trader = new BushelTrader(calculator);
+  }
 
   public void askHowMuchToUseForFood(City city) throws IOException {
+    boolean questionAnswered = false;
     output.println(FOOD_QUESTION);
-    Integer bushelsToEat = inputStream.read();
-    while (!this.doesCityHaveTheResources(bushelsToEat, city.getBushelCount())) {
-      output.printf(BUSHEL_CORRECTION_MESSAGE, city.getBushelCount());
-      output.println(FOOD_QUESTION);
-      bushelsToEat = inputStream.read();
+    while(!questionAnswered) {
+      String stringInput = bufferedReader.readLine();
+
+      while (!isInteger(stringInput)) {
+        printCorrectionMessage(city);
+        stringInput = bufferedReader.readLine();
+      }
+      Integer bushelsToUseAsFood = Integer.valueOf(stringInput);
+      if (doesCityHaveTheResources(bushelsToUseAsFood, city.getBushelCount())) {
+        city.setBushelsToSaveForFood(bushelsToUseAsFood);
+        city.setBushelCount(city.getBushelCount() - bushelsToUseAsFood);
+        questionAnswered = true;
+      }
+      else{
+        printCorrectionMessage(city);
+      }
     }
-    city.setBushelsToSaveForFood(bushelsToEat);
-    city.setBushelCount(city.getBushelCount() - bushelsToEat);
+  }
+
+  private void printCorrectionMessage(City city) {
+    output.printf(BUSHEL_CORRECTION_MESSAGE, city.getBushelCount());
+    output.println(FOOD_QUESTION);
   }
 
 
@@ -56,20 +82,20 @@ public class QuestionAsker {
       acresToTrade = inputStream.read();
     }
     if (acresToTrade < 0) {
-        trader.sellAcreage(Math.abs(acresToTrade), city);
+      trader.sellAcreage(Math.abs(acresToTrade), city);
     } else {
       trader.buyAcreage(acresToTrade, city);
     }
   }
 
   public boolean isInteger(String invalidInput) {
-    boolean result = true;
+    boolean isValid = true;
     try {
       parseInt(invalidInput);
-    }catch (NumberFormatException e){
-      return false;
+    } catch (NumberFormatException e) {
+      isValid = false;
     }
-    return result;
+    return isValid;
 
   }
 

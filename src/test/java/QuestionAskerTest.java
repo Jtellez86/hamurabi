@@ -3,6 +3,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.PrintStream;
 
@@ -21,6 +22,9 @@ public class QuestionAskerTest {
   InputStream mockInputStream;
 
   @Mock
+  BufferedReader mockBufferedReader;
+
+  @Mock
   PrintStream mockPrintStream;
 
   @Mock
@@ -32,9 +36,9 @@ public class QuestionAskerTest {
   @Test
   public void shouldAskHowManyBushelsToUseAsFood() throws Exception {
     city = new City(10);
-    when(mockInputStream.read()).thenReturn(10);
+    when(mockBufferedReader.readLine()).thenReturn("10");
 
-    asker = new QuestionAsker(mockInputStream, System.out, calculator);
+    asker = new QuestionAsker(mockBufferedReader, System.out, calculator);
 
     asker.askHowMuchToUseForFood(city);
 
@@ -45,8 +49,20 @@ public class QuestionAskerTest {
   @Test
   public void shouldAskHowMuchToUseAsFoodIfAnswerIsInvalid() throws Exception {
     city = new City(10);
-    when(mockInputStream.read()).thenReturn(20, 15, 10);
-    asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
+    when(mockBufferedReader.readLine()).thenReturn("20", "15", "10");
+    asker = new QuestionAsker(mockBufferedReader, mockPrintStream, calculator);
+
+    asker.askHowMuchToUseForFood(city);
+
+    verify(mockPrintStream, times(3)).println("How many bushels do you wish to feed your people?");
+    verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
+  }
+
+  @Test
+  public void shouldAskQuestionAgainIfInputIsNonInteger() throws Exception {
+    city = new City(10);
+    when(mockBufferedReader.readLine()).thenReturn("f", "f", "10");
+    asker = new QuestionAsker(mockBufferedReader, mockPrintStream, calculator);
 
     asker.askHowMuchToUseForFood(city);
 
