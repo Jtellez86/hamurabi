@@ -22,43 +22,43 @@ public class QuestionAsker {
   }
 
 
-  public void askHowMuchToUseForFood(Player player) throws IOException {
+  public void askHowMuchToUseForFood(City city) throws IOException {
     output.println(FOOD_QUESTION);
     Integer bushelsToEat = inputStream.read();
-    while (!answerValidator.doesCityHaveTheResources(bushelsToEat, player.getCity().getBushelCount())) {
-      output.printf(BUSHEL_CORRECTION_MESSAGE, player.getCity().getBushelCount());
+    while (!answerValidator.doesCityHaveTheResources(bushelsToEat, city.getBushelCount())) {
+      output.printf(BUSHEL_CORRECTION_MESSAGE, city.getBushelCount());
       output.println(FOOD_QUESTION);
       bushelsToEat = inputStream.read();
     }
-    player.setBushelsToEat(bushelsToEat);
-    player.getCity().setBushelCount(player.getCity().getBushelCount() - bushelsToEat);
+    city.setBushelsToSaveForFood(bushelsToEat);
+    city.setBushelCount(city.getBushelCount() - bushelsToEat);
   }
 
 
-  public void askHowMuchToPlant(Player player) throws IOException {
+  public void askHowMuchToPlant(City city) throws IOException {
     output.println(PLANT_QUESTION);
     Integer bushelsToPlant = inputStream.read();
-    while (!answerValidator.doesCityHaveTheResources(bushelsToPlant, player.getCity().getBushelCount())) {
-      output.printf(BUSHEL_CORRECTION_MESSAGE, player.getCity().getBushelCount());
+    while (!answerValidator.doesCityHaveTheResources(bushelsToPlant, city.getBushelCount())) {
+      output.printf(BUSHEL_CORRECTION_MESSAGE, city.getBushelCount());
       output.println(PLANT_QUESTION);
       bushelsToPlant = inputStream.read();
     }
-    player.getCity().setBushelCount(player.getCity().getBushelCount() - bushelsToPlant);
+    city.setBushelCount(city.getBushelCount() - bushelsToPlant);
   }
 
-  public void askHowMuchLandToTrade(Player player) throws IOException {
+  public void askHowMuchLandToTrade(City city) throws IOException {
     output.println(LAND_QUESTION);
     Integer acresToTrade = inputStream.read();
 
-    while (!answerValidator.doesCityHaveTheResources(Math.abs(acresToTrade), player.getCity().getAcreage())) {
-      output.printf(ACREAGE_CORRECTION_MESSAGE, player.getCity().getAcreage());
+    while (!answerValidator.doesCityHaveTheResources(Math.abs(acresToTrade), city.getAcreage())) {
+      output.printf(ACREAGE_CORRECTION_MESSAGE, city.getAcreage());
       output.println(LAND_QUESTION);
       acresToTrade = inputStream.read();
     }
     if (acresToTrade < 0) {
-        trader.sellAcreage(Math.abs(acresToTrade), player.getCity());
+        trader.sellAcreage(Math.abs(acresToTrade), city);
     } else {
-      trader.buyAcreage(acresToTrade, player.getCity());
+      trader.buyAcreage(acresToTrade, city);
     }
   }
 }
