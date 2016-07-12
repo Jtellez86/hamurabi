@@ -14,8 +14,8 @@ import static org.mockito.Mockito.*;
 public class QuestionAskerTest {
 
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
-  public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n";
-  public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, %n";
+  public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
+  public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
 
   @Mock
   InputStream mockInputStream;
@@ -51,7 +51,7 @@ public class QuestionAskerTest {
     asker.askHowMuchToUseForFood(city);
 
     verify(mockPrintStream, times(3)).println("How many bushels do you wish to feed your people?");
-    verify(mockPrintStream, times(2)).printf("Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, %n", 10);
+    verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
   }
 
   @Test
@@ -116,5 +116,23 @@ public class QuestionAskerTest {
 
     verify(mockPrintStream, times(3)).println(LAND_QUESTION);
     verify(mockPrintStream, times(2)).printf(ACREAGE_CORRECTION_MESSAGE, 1000);
+  }
+
+  @Test
+  public void shouldRejectNonIntegerInput() throws Exception {
+    asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
+
+    boolean isValid = asker.isInteger("invalidInput");
+
+    assertThat(isValid).isFalse();
+  }
+
+  @Test
+  public void shouldNotAllowAllocationAmountGreaterThanSurplus() throws Exception {
+    City city = new City(10);
+    asker = new QuestionAsker(mockInputStream, mockPrintStream, calculator);
+
+    boolean isValidSavingsAmount = asker.doesCityHaveTheResources(20, city.getBushelCount());
+    assertThat(isValidSavingsAmount).isFalse();
   }
 }
