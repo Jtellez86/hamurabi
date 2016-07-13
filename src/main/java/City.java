@@ -21,6 +21,7 @@ public class City {
     this.population = 100;
     this.acreage = 1000;
     this.bushelsToUseForFood = 0;
+    this.bushelsToUseForPlanting = 0;
     this.deathCount = 0;
     this.newCitizens = 0;
     this.acresToTrade = 0;
@@ -37,7 +38,7 @@ public class City {
     updater.subtractRatLoss(this);
 
     this.setBushelsPerAcre(randomnesscalculator.calculateRandomnessBetween(1, 5));
-    updater.updateBushelCount(this);
+    updater.updateBushelCountWithHarvest(this);
 
     this.setValueOfLandInBushels(randomnesscalculator.calculateRandomnessBetween(17, 26));
   }
@@ -118,7 +119,7 @@ public class City {
     return this.bushelsPerAcre;
   }
 
-  private void setBushelsPerAcre(Integer bushelsPerAcre) {
+  public void setBushelsPerAcre(Integer bushelsPerAcre) {
     this.bushelsPerAcre = bushelsPerAcre;
   }
 

@@ -40,6 +40,8 @@ public class Hamurabi {
         break;
       }
     }
+    printEndGameMessage(city);
+
   }
 
   public void printMOTY(City city, Integer yearsRuled) {
@@ -48,9 +50,16 @@ public class Hamurabi {
     out.printf("%d people came to the city.\n", city.getNewCitizens());
     out.printf("The city population is now %d.\n", city.getPopulation());
     out.printf("The city now owns %d acres.\n", city.getAcreage());
-    out.printf("You harvested %d per acre\n", city.getBushelsHarvested());
+    out.printf("You harvested %d bushels per acre\n", city.getBushelsPerAcre());
     out.printf("Rats ate %d bushels\n", city.getBushelsEatenByRats());
     out.printf("You now have %d bushels in store\n", city.getBushelCount());
     out.printf("Land is trading at %d bushels per acre\n", city.getValueOfLandInBushels());
+  }
+
+  public void printEndGameMessage(City city) {
+    out.println("\nCongratulations! You have managed to serve this city for 10 years without impeachment!\n");
+    out.printf("Your city has of %d citizens and you have %d bushels of food in surplus\n", city.getPopulation(), city.getBushelCount());
+    out.println("\nWell done!\n");
+
   }
 }

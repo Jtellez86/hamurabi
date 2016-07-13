@@ -36,11 +36,11 @@ public class CityTest {
     assertThat(city.getPopulation()).isEqualTo(102);
     assertThat(city.getAcreage()).isEqualTo(1000);
     assertThat(city.getBushelsPerAcre()).isEqualTo(3);
-    assertThat(city.getBushelsHarvested()).isEqualTo(3000);
+    assertThat(city.getBushelsHarvested()).isEqualTo(0);
     assertThat(city.getBushelsEatenByRats()).isEqualTo(100);
 
     //after harvest and rat loss
-    assertThat(city.getBushelCount()).isEqualTo(3900);
+    assertThat(city.getBushelCount()).isEqualTo(900);
 
     assertThat(city.getValueOfLandInBushels()).isEqualTo(20);
   }
