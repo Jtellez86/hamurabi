@@ -1,4 +1,4 @@
-package exceptions;
+package com.hamurabi.exceptions;
 
 public class TerribleRulerException extends Throwable {
   public TerribleRulerException() {}

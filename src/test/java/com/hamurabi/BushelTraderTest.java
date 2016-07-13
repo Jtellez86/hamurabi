@@ -1,3 +1,6 @@
+package com.hamurabi;
+
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +33,8 @@ public class BushelTraderTest {
   public void shouldTradeBushelsForAcreage(){
     trader.buyAcreage(1, city);
 
-    assertThat(city.getAcreage()).isEqualTo(1001);
-    assertThat(city.getBushelCount()).isEqualTo(0);
+    Assertions.assertThat(city.getAcreage()).isEqualTo(1001);
+    Assertions.assertThat(city.getBushelCount()).isEqualTo(0);
     verify(mockedPrintStream, times(0)).println(anyString());
   }
 
@@ -39,8 +42,8 @@ public class BushelTraderTest {
   public void shouldTradeAcreageForBushels(){
     trader.sellAcreage(1, city);
 
-    assertThat(city.getAcreage()).isEqualTo(999);
-    assertThat(city.getBushelCount()).isEqualTo(40);
+    Assertions.assertThat(city.getAcreage()).isEqualTo(999);
+    Assertions.assertThat(city.getBushelCount()).isEqualTo(40);
     verify(mockedPrintStream, times(0)).println(anyString());
   }
 }

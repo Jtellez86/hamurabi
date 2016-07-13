@@ -1,3 +1,5 @@
+package com.hamurabi;
+
 public class RoundUpdater {
 
   public void addCitizens(City city){

@@ -1,3 +1,5 @@
+package com.hamurabi;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomnessCalculator {

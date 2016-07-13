@@ -1,4 +1,7 @@
-import exceptions.TerribleRulerException;
+package com.hamurabi;
+
+import com.hamurabi.exceptions.TerribleRulerException;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +21,7 @@ public class EndGameCalculatorTest {
     City city = new City(10);
     city.setDeathCount(100);
 
-    assertThat(calculator.isGameOver(city)).isTrue();
+    Assertions.assertThat(calculator.isGameOver(city)).isTrue();
   }
 
   @Test(expected = TerribleRulerException.class)
@@ -26,7 +29,7 @@ public class EndGameCalculatorTest {
     City city = new City(20);
     city.setDeathCount(55);
 
-    assertThat(calculator.isGameOver(city)).isTrue();
+    Assertions.assertThat(calculator.isGameOver(city)).isTrue();
   }
 
   @Test
@@ -34,6 +37,6 @@ public class EndGameCalculatorTest {
     City city = new City(10);
     city.setDeathCount(40);
 
-    assertThat(calculator.isGameOver(city)).isFalse();
+    Assertions.assertThat(calculator.isGameOver(city)).isFalse();
   }
 }

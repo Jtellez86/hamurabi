@@ -1,4 +1,6 @@
-import exceptions.TerribleRulerException;
+package com.hamurabi;
+
+import com.hamurabi.exceptions.TerribleRulerException;
 
 import java.io.BufferedReader;
 import java.io.IOException;

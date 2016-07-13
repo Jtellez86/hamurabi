@@ -1,3 +1,5 @@
+package com.hamurabi;
+
 public class City {
 
   private Integer bushelCount;

@@ -1,4 +1,6 @@
-import exceptions.TerribleRulerException;
+package com.hamurabi;
+
+import com.hamurabi.exceptions.TerribleRulerException;
 
 public class EndGameCalculator {
 

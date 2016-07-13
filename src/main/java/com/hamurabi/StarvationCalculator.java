@@ -1,3 +1,5 @@
+package com.hamurabi;
+
 import static java.lang.Math.abs;
 
 public class StarvationCalculator {

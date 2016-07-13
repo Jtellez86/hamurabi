@@ -1,3 +1,5 @@
+package com.hamurabi;
+
 import java.io.IOException;
 
 public class Application {
