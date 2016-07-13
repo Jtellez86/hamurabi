@@ -1,16 +1,25 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
-// In this section you declare where to find the dependencies of your project
+version = '1.0'
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Hamurabi',
+          'Implementation-Version': version,
+          'Main-Class': 'Application'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+
 repositories {
-    // Use 'maven central' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     mavenCentral()
 }
 
-// In this section you declare the dependencies for your production and test code
 dependencies {
-    // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.5'
 
     testCompile 'junit:junit:4.11'

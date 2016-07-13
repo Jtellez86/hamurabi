@@ -43,7 +43,7 @@ public class Hamurabi {
   }
 
   public void printMOTY(City city, Integer yearsRuled) {
-    out.println("Hammurabi: I beg to report to you,\n");
+    out.println("\nHammurabi: I beg to report to you,\n");
     out.printf("In Year %d, %d people starved.\n", yearsRuled, city.getDeathCount());
     out.printf("%d people came to the city.\n", city.getNewCitizens());
     out.printf("The city population is now %d.\n", city.getPopulation());
