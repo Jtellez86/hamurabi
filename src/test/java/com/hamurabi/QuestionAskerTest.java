@@ -22,16 +22,16 @@ public class QuestionAskerTest {
   public static final String ACREAGE_CORRECTION_MESSAGE = "com.hamurabi.Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
 
   @Mock
-  InputStream mockInputStream;
+  private InputStream mockInputStream;
 
   @Mock
-  BufferedReader mockBufferedReader;
+  private BufferedReader mockBufferedReader;
 
   @Mock
-  PrintStream mockPrintStream;
+  private PrintStream mockPrintStream;
 
-  QuestionAsker asker;
-  City city;
+  private QuestionAsker asker;
+  private City city;
 
   @Test
   public void shouldAskHowManyBushelsToUseAsFood() throws Exception {

@@ -1,6 +1,5 @@
 package com.hamurabi;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,9 +13,9 @@ import static org.mockito.Mockito.when;
 public class CityTest {
 
   @Mock
-  RandomnessCalculator calculator;
+  private RandomnessCalculator calculator;
 
-  City city;
+  private City city;
 
   @Before
   public void setUp() throws Exception {
@@ -34,17 +33,17 @@ public class CityTest {
 
     city.startYear();
 
-    Assertions.assertThat(city.getDeathCount()).isEqualTo(0);
-    Assertions.assertThat(city.getNewCitizens()).isEqualTo(2);
-    Assertions.assertThat(city.getPopulation()).isEqualTo(102);
-    Assertions.assertThat(city.getAcreage()).isEqualTo(1000);
-    Assertions.assertThat(city.getBushelsPerAcre()).isEqualTo(3);
-    Assertions.assertThat(city.getBushelsHarvested()).isEqualTo(0);
-    Assertions.assertThat(city.getBushelsEatenByRats()).isEqualTo(100);
+    assertThat(city.getDeathCount()).isEqualTo(0);
+    assertThat(city.getNewCitizens()).isEqualTo(2);
+    assertThat(city.getPopulation()).isEqualTo(102);
+    assertThat(city.getAcreage()).isEqualTo(1000);
+    assertThat(city.getBushelsPerAcre()).isEqualTo(3);
+    assertThat(city.getBushelsHarvested()).isEqualTo(0);
+    assertThat(city.getBushelsEatenByRats()).isEqualTo(100);
 
     //after harvest and rat loss
-    Assertions.assertThat(city.getBushelCount()).isEqualTo(900);
+    assertThat(city.getBushelCount()).isEqualTo(900);
 
-    Assertions.assertThat(city.getValueOfLandInBushels()).isEqualTo(20);
+    assertThat(city.getValueOfLandInBushels()).isEqualTo(20);
   }
 }

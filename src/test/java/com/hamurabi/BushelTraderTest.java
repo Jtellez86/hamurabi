@@ -1,6 +1,5 @@
 package com.hamurabi;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,13 +10,14 @@ import java.io.PrintStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BushelTraderTest {
 
   @Mock
-  PrintStream mockedPrintStream;
+  private PrintStream mockedPrintStream;
 
   private BushelTrader trader;
   private City city;
@@ -33,8 +33,8 @@ public class BushelTraderTest {
   public void shouldTradeBushelsForAcreage(){
     trader.buyAcreage(1, city);
 
-    Assertions.assertThat(city.getAcreage()).isEqualTo(1001);
-    Assertions.assertThat(city.getBushelCount()).isEqualTo(0);
+    assertThat(city.getAcreage()).isEqualTo(1001);
+    assertThat(city.getBushelCount()).isEqualTo(0);
     verify(mockedPrintStream, times(0)).println(anyString());
   }
 
@@ -42,8 +42,8 @@ public class BushelTraderTest {
   public void shouldTradeAcreageForBushels(){
     trader.sellAcreage(1, city);
 
-    Assertions.assertThat(city.getAcreage()).isEqualTo(999);
-    Assertions.assertThat(city.getBushelCount()).isEqualTo(40);
+    assertThat(city.getAcreage()).isEqualTo(999);
+    assertThat(city.getBushelCount()).isEqualTo(40);
     verify(mockedPrintStream, times(0)).println(anyString());
   }
 }
