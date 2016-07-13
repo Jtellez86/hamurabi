@@ -1,13 +1,11 @@
 package com.hamurabi;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,9 +18,6 @@ public class QuestionAskerTest {
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
   public static final String BUSHEL_CORRECTION_MESSAGE = "com.hamurabi.Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
   public static final String ACREAGE_CORRECTION_MESSAGE = "com.hamurabi.Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
-
-  @Mock
-  private InputStream mockInputStream;
 
   @Mock
   private BufferedReader mockBufferedReader;
@@ -42,8 +37,8 @@ public class QuestionAskerTest {
 
     asker.askHowMuchToUseForFood(city);
 
-    Assertions.assertThat(city.getBushelsToUseForFood()).isEqualTo(10);
-    Assertions.assertThat(city.getBushelCount()).isEqualTo(0);
+    assertThat(city.getBushelsToUseForFood()).isEqualTo(10);
+    assertThat(city.getBushelCount()).isEqualTo(0);
   }
 
   @Test
@@ -78,8 +73,8 @@ public class QuestionAskerTest {
 
     asker.askHowManyBushelsToPlant(city);
 
-    Assertions.assertThat(city.getBushelCount()).isEqualTo(30);
-    Assertions.assertThat(city.getBushelsToUseForPlanting()).isEqualTo(20);
+    assertThat(city.getBushelCount()).isEqualTo(30);
+    assertThat(city.getBushelsToUseForPlanting()).isEqualTo(20);
   }
 
   @Test
@@ -103,9 +98,9 @@ public class QuestionAskerTest {
 
     asker.askHowMuchLandToTrade(city);
 
-    Assertions.assertThat(city.getBushelCount()).isEqualTo(40);
-    Assertions.assertThat(city.getAcreage()).isEqualTo(999);
-    Assertions.assertThat(city.getAcresToTrade()).isEqualTo(1);
+    assertThat(city.getBushelCount()).isEqualTo(40);
+    assertThat(city.getAcreage()).isEqualTo(999);
+    assertThat(city.getAcresToTrade()).isEqualTo(1);
 
     verify(mockPrintStream).println(LAND_QUESTION);
   }
