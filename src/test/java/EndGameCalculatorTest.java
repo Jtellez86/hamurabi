@@ -16,21 +16,24 @@ public class EndGameCalculatorTest {
   @Test(expected = TerribleRulerException.class)
   public void shouldLoseIfPopulationIsWipedOut() throws TerribleRulerException {
     City city = new City(10);
+    city.setDeathCount(100);
 
-    assertThat(calculator.isGameOver(city, 100)).isTrue();
+    assertThat(calculator.isGameOver(city)).isTrue();
   }
 
   @Test(expected = TerribleRulerException.class)
   public void shouldLoseIfPopulationIs45PercentIsLost() throws TerribleRulerException {
-    City city = new City(10);
+    City city = new City(20);
+    city.setDeathCount(55);
 
-    assertThat(calculator.isGameOver(city, 45)).isTrue();
+    assertThat(calculator.isGameOver(city)).isTrue();
   }
 
   @Test
   public void shouldContinueIfPopulationHasNotLost45PercentOfPopulation() throws TerribleRulerException {
     City city = new City(10);
+    city.setDeathCount(40);
 
-    assertThat(calculator.isGameOver(city, 44)).isFalse();
+    assertThat(calculator.isGameOver(city)).isFalse();
   }
 }

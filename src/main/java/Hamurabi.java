@@ -1,25 +1,44 @@
+import exceptions.TerribleRulerException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static java.lang.System.*;
 import static java.lang.System.out;
 
 public class Hamurabi {
 
   private City city;
   private QuestionAsker asker;
+  private EndGameCalculator endGame;
 
   public Hamurabi() throws IOException {
     this.city = new City(2800);
-    this.asker = new QuestionAsker(new BufferedReader(new InputStreamReader(System.in)), System.out);
-    gameLoop();
+    this.asker = new QuestionAsker(new BufferedReader(new InputStreamReader(in)), out);
+    this.endGame = new EndGameCalculator();
   }
 
-  private void gameLoop() throws IOException{
-    city.initializeCity();
+  public void runGameLoop() throws IOException{
+    city.startYear();
     for(int year= 1; year < 11; year++){
       printMOTY(city, year);
       asker.askHowMuchToUseForFood(city);
+      asker.askHowManyBushelsToPlant(city);
+      asker.askHowMuchLandToTrade(city);
+
+      city.endYear();
+
+      if(city.getDeathCount() > 0){
+        out.printf("You starved %d people in one year!!!%n", city.getDeathCount());
+      }
+
+      try {
+        endGame.isGameOver(city);
+      } catch (TerribleRulerException e) {
+        out.println("Due to this extreme mismanagement, you have not only been impeached and thrown out of office, but you have also been declared 'National Fink'!");
+        break;
+      }
     }
   }
 

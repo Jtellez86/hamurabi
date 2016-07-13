@@ -4,10 +4,10 @@ public class EndGameCalculator {
 
 
 
-  public boolean isGameOver(City city, Integer numberOfDeaths) throws TerribleRulerException {
+  public boolean isGameOver(City city) throws TerribleRulerException {
     boolean isOver = false;
 
-    Integer adjustedPopulation = city.getPopulation() - numberOfDeaths;
+    Integer adjustedPopulation = city.getPopulation() - city.getDeathCount();
     Float fiftyFivePercentOfPop = (city.getPopulation() * .55f);
 
     if(isCityPopulationWipedOut(city) || is45PercentDead(adjustedPopulation, fiftyFivePercentOfPop)){

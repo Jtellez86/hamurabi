@@ -14,6 +14,7 @@ public class City {
   private Integer acresToTrade;
   private RoundUpdater updater;
   private RandomnessCalculator randomnesscalculator;
+  private StarvationCalculator starvationCalculator;
 
   public City(Integer startingBushels) {
     this.bushelCount = startingBushels;
@@ -23,11 +24,12 @@ public class City {
     this.deathCount = 0;
     this.newCitizens = 0;
     this.acresToTrade = 0;
-    randomnesscalculator = new RandomnessCalculator();
-    updater = new RoundUpdater();
+    this.updater = new RoundUpdater();
+    this.randomnesscalculator = new RandomnessCalculator();
+    this.starvationCalculator = new StarvationCalculator();
   }
 
-  public void initializeCity() {
+  public void startYear() {
     this.setNewCitizens(randomnesscalculator.calculateRandomnessBetween(0, 7));
     updater.addCitizens(this);
 
@@ -38,6 +40,10 @@ public class City {
     updater.updateBushelCount(this);
 
     this.setValueOfLandInBushels(randomnesscalculator.calculateRandomnessBetween(17, 26));
+  }
+
+  public void endYear() {
+    this.setDeathCount(starvationCalculator.calculateDeaths(this.getPopulation(), this.getBushelsToUseForFood()));
   }
 
   public Integer getBushelCount() {
@@ -134,5 +140,9 @@ public class City {
 
   public Integer getAcresToTrade() {
     return acresToTrade;
+  }
+
+  public void setDeathCount(Integer deathCount) {
+    this.deathCount = deathCount;
   }
 }

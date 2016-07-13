@@ -1,25 +1,18 @@
-import java.io.PrintStream;
+import static java.lang.Math.abs;
 
 public class StarvationCalculator {
 
-  private final int BUSHELS_PER_PERSON = 20;
-  private final PrintStream output;
+  private final int BUSHELS_NEEDED_PER_PERSON = 20;
 
-  public StarvationCalculator(PrintStream output) {
-    this.output = output;
-  }
-
-
-  public Integer calculateDeaths(Integer citizens, Integer bushels) {
+  public Integer calculateDeaths(Integer citizens, Integer bushelsUsedForFood) {
     Integer totalDead = 0;
 
-    Integer bushelsNeeded = citizens * BUSHELS_PER_PERSON;
+    Integer bushelsNeeded = citizens * BUSHELS_NEEDED_PER_PERSON;
 
-    int result = bushels - bushelsNeeded;
+    int result = bushelsUsedForFood - bushelsNeeded;
 
     if(isShortage(result)){
-      totalDead = -(result)/BUSHELS_PER_PERSON;
-      output.printf("You starved %d people in one year!!!%n", totalDead);
+      totalDead = abs(result)/ BUSHELS_NEEDED_PER_PERSON;
     }
 
     return totalDead;
