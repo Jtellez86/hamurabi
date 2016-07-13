@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static java.lang.System.out;
 
@@ -9,14 +11,14 @@ public class Hamurabi {
 
   public Hamurabi() throws IOException {
     this.city = new City(2800);
-    this.asker = new QuestionAsker(System.in, System.out, new RandomnessCalculator());
+    this.asker = new QuestionAsker(new BufferedReader(new InputStreamReader(System.in)), System.out);
     gameLoop();
   }
 
   private void gameLoop() throws IOException{
     city.initializeCity();
     for(int year= 1; year < 11; year++){
-      printMOTY(city, 1);
+      printMOTY(city, year);
       asker.askHowMuchToUseForFood(city);
     }
   }

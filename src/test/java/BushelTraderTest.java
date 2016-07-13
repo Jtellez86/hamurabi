@@ -1,3 +1,4 @@
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -13,20 +14,20 @@ import static org.mockito.Mockito.*;
 public class BushelTraderTest {
 
   @Mock
-  RandomnessCalculator mockedRandomnessCalculator;
-
-  @Mock
   PrintStream mockedPrintStream;
 
   private BushelTrader trader;
   private City city;
 
+  @Before
+  public void setUp() throws Exception {
+    city = new City(20);
+    city.setValueOfLandInBushels(20);
+    trader = new BushelTrader();
+  }
+
   @Test
   public void shouldTradeBushelsForAcreage(){
-    when(mockedRandomnessCalculator.calculateRandomnessBetween(17, 26)).thenReturn(20);
-    city = new City(20);
-    trader = new BushelTrader(mockedRandomnessCalculator);
-
     trader.buyAcreage(1, city);
 
     assertThat(city.getAcreage()).isEqualTo(1001);
@@ -36,11 +37,7 @@ public class BushelTraderTest {
 
   @Test
   public void shouldTradeAcreageForBushels(){
-    when(mockedRandomnessCalculator.calculateRandomnessBetween(17, 26)).thenReturn(20);
-    city = new City(20);
-    trader = new BushelTrader(mockedRandomnessCalculator);
-
-    trader.sellAcreage(-1, city);
+    trader.sellAcreage(1, city);
 
     assertThat(city.getAcreage()).isEqualTo(999);
     assertThat(city.getBushelCount()).isEqualTo(40);

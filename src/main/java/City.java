@@ -3,23 +3,26 @@ public class City {
   private Integer bushelCount;
   private Integer population;
   private Integer acreage;
-  private Integer bushelsToSaveForFood;
+  private Integer bushelsToUseForFood;
+  private Integer bushelsToUseForPlanting;
   private Integer deathCount;
   private Integer newCitizens;
   private Integer bushelsEatenByRats;
   private Integer valueOfLandInBushels;
-  private RandomnessCalculator randomnesscalculator;
   private Integer bushelsHarvested;
   private Integer bushelsPerAcre;
+  private Integer acresToTrade;
   private RoundUpdater updater;
+  private RandomnessCalculator randomnesscalculator;
 
   public City(Integer startingBushels) {
     this.bushelCount = startingBushels;
     this.population = 100;
     this.acreage = 1000;
-    this.bushelsToSaveForFood = 0;
+    this.bushelsToUseForFood = 0;
     this.deathCount = 0;
     this.newCitizens = 0;
+    this.acresToTrade = 0;
     randomnesscalculator = new RandomnessCalculator();
     updater = new RoundUpdater();
   }
@@ -93,16 +96,16 @@ public class City {
     this.bushelsHarvested = bushelsHarvested;
   }
 
-  public Integer getBushelsToSaveForFood() {
-    return bushelsToSaveForFood;
+  public Integer getBushelsToUseForFood() {
+    return bushelsToUseForFood;
   }
 
   public Integer getBushelsEatenByRats() {
     return bushelsEatenByRats;
   }
 
-  public void setBushelsToSaveForFood(Integer bushelsToSaveForFood) {
-    this.bushelsToSaveForFood = bushelsToSaveForFood;
+  public void setBushelsToUseForFood(Integer bushelsToSaveForFood) {
+    this.bushelsToUseForFood = bushelsToSaveForFood;
   }
 
   public Integer getBushelsPerAcre() {
@@ -115,5 +118,21 @@ public class City {
 
   public void setRandomnesscalculator(RandomnessCalculator randomnesscalculator) {
     this.randomnesscalculator = randomnesscalculator;
+  }
+
+  public Integer getBushelsToUseForPlanting() {
+    return bushelsToUseForPlanting;
+  }
+
+  public void setBushelsToUseForPlanting(Integer bushelsToSaveForPlanting) {
+    this.bushelsToUseForPlanting = bushelsToSaveForPlanting;
+  }
+
+  public void setAcresToTrade(Integer acresToTrade) {
+    this.acresToTrade = acresToTrade;
+  }
+
+  public Integer getAcresToTrade() {
+    return acresToTrade;
   }
 }
