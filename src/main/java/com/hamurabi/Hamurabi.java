@@ -1,12 +1,10 @@
 package com.hamurabi;
 
-import com.hamurabi.exceptions.TerribleRulerException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static java.lang.System.*;
+import static java.lang.System.in;
 import static java.lang.System.out;
 
 public class Hamurabi {
@@ -21,8 +19,8 @@ public class Hamurabi {
     this.endGame = new EndGameCalculator();
   }
 
-  public void runGameLoop() throws IOException{
-    for(int year= 1; year < 11; year++){
+  public void runGameLoop() throws IOException {
+    for (int year = 1; year < 11; year++) {
       city.startYear();
       printMOTY(city, year);
 
@@ -32,19 +30,16 @@ public class Hamurabi {
 
       city.endYear();
 
-      if(city.getDeathCount() > 0){
+      if (city.getDeathCount() > 0) {
         out.printf("You starved %d people in one year!!!%n", city.getDeathCount());
       }
 
-      try {
-        endGame.isGameOver(city);
-      } catch (TerribleRulerException e) {
+      if (endGame.isGameOver(city)) {
         out.println("Due to this extreme mismanagement, you have not only been impeached and thrown out of office, but you have also been declared 'National Fink'!");
         break;
       }
     }
     printEndGameMessage(city);
-
   }
 
   public void printMOTY(City city, Integer yearsRuled) {

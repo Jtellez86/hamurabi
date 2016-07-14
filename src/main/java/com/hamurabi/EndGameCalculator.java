@@ -1,12 +1,10 @@
 package com.hamurabi;
 
-import com.hamurabi.exceptions.TerribleRulerException;
-
 public class EndGameCalculator {
 
 
 
-  public boolean isGameOver(City city) throws TerribleRulerException {
+  public boolean isGameOver(City city){
     boolean isOver = false;
 
     Integer adjustedPopulation = city.getPopulation() - city.getDeathCount();
@@ -14,7 +12,6 @@ public class EndGameCalculator {
 
     if(isCityPopulationWipedOut(city) || is45PercentDead(adjustedPopulation, fiftyFivePercentOfPop)){
       isOver = true;
-      throw new TerribleRulerException();
     }
 
     return isOver;

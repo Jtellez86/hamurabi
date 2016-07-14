@@ -1,6 +1,5 @@
 package com.hamurabi;
 
-import com.hamurabi.exceptions.TerribleRulerException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,16 +15,16 @@ public class EndGameCalculatorTest {
 
   }
 
-  @Test(expected = TerribleRulerException.class)
-  public void shouldLoseIfPopulationIsWipedOut() throws TerribleRulerException {
+  @Test
+  public void shouldLoseIfPopulationIsWipedOut(){
     City city = new City(10);
     city.setDeathCount(100);
 
     assertThat(calculator.isGameOver(city)).isTrue();
   }
 
-  @Test(expected = TerribleRulerException.class)
-  public void shouldLoseIfPopulationIs45PercentIsLost() throws TerribleRulerException {
+  @Test
+  public void shouldLoseIfPopulationIs45PercentIsLost(){
     City city = new City(20);
     city.setDeathCount(55);
 
@@ -33,7 +32,7 @@ public class EndGameCalculatorTest {
   }
 
   @Test
-  public void shouldContinueIfPopulationHasNotLost45PercentOfPopulation() throws TerribleRulerException {
+  public void shouldContinueIfPopulationHasNotLost45PercentOfPopulation(){
     City city = new City(10);
     city.setDeathCount(40);
 
