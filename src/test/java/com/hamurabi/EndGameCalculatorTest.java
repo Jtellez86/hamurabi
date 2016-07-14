@@ -8,33 +8,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EndGameCalculatorTest {
 
   private EndGameCalculator calculator;
+  private City city;
 
   @Before
   public void setUp() throws Exception {
     calculator = new EndGameCalculator();
-
+    city = new City(10);
+    city.setPopulation(100);
+    city.setDeathCount(100);
   }
 
   @Test
   public void shouldLoseIfPopulationIsWipedOut(){
-    City city = new City(10);
-    city.setDeathCount(100);
-
     assertThat(calculator.isGameOver(city)).isTrue();
   }
 
   @Test
   public void shouldLoseIfPopulationIs45PercentIsLost(){
-    City city = new City(20);
-    city.setDeathCount(55);
+    city.setDeathCount(45);
 
     assertThat(calculator.isGameOver(city)).isTrue();
   }
 
   @Test
   public void shouldContinueIfPopulationHasNotLost45PercentOfPopulation(){
-    City city = new City(10);
-    city.setDeathCount(40);
+    city.setDeathCount(44);
 
     assertThat(calculator.isGameOver(city)).isFalse();
   }

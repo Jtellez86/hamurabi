@@ -1,5 +1,7 @@
 package com.hamurabi;
 
+import static java.lang.System.out;
+
 public class City {
 
   private Integer bushelCount;
@@ -45,10 +47,13 @@ public class City {
     this.setValueOfLandInBushels(randomnesscalculator.calculateRandomnessBetween(17, 26));
   }
 
-  public void endYear() {
+  public void calculateDeaths() {
     Integer deathCount = starvationCalculator.calculateDeaths(this.getPopulation(), this.getBushelsToUseForFood());
     this.setDeathCount(deathCount);
-    this.setPopulation(this.getPopulation() - deathCount);
+
+    if (deathCount > 0) {
+      out.printf("You starved %d people in one year!!!%n", deathCount);
+    }
   }
 
   public Integer getBushelCount() {

@@ -29,11 +29,7 @@ public class Hamurabi {
       asker.askHowManyBushelsToPlant(city);
       asker.askHowMuchLandToTrade(city);
 
-      city.endYear();
-
-      if (city.getDeathCount() > 0) {
-        out.printf("You starved %d people in one year!!!%n", city.getDeathCount());
-      }
+      city.calculateDeaths();
 
       if (endGame.isGameOver(city)) {
         loser = true;
