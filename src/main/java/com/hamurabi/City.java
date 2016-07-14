@@ -46,7 +46,9 @@ public class City {
   }
 
   public void endYear() {
-    this.setDeathCount(starvationCalculator.calculateDeaths(this.getPopulation(), this.getBushelsToUseForFood()));
+    Integer deathCount = starvationCalculator.calculateDeaths(this.getPopulation(), this.getBushelsToUseForFood());
+    this.setDeathCount(deathCount);
+    this.setPopulation(this.getPopulation() - deathCount);
   }
 
   public Integer getBushelCount() {

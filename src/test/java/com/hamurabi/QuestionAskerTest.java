@@ -85,7 +85,7 @@ public class QuestionAskerTest {
 
     asker.askHowManyBushelsToPlant(city);
 
-    verify(mockPrintStream, times(3)).println("How many acres do you wish to plant with seed?");
+    verify(mockPrintStream, times(3)).println("How many acres do you wish to plant with seed? (1 bushel per acre)");
     verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
   }
 

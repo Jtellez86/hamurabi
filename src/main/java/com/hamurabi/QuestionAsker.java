@@ -10,7 +10,7 @@ import static java.lang.Math.abs;
 
 public class QuestionAsker {
   public static final String FOOD_QUESTION = "How many bushels do you wish to feed your people?";
-  public static final String PLANT_QUESTION = "How many acres do you wish to plant with seed?";
+  public static final String PLANT_QUESTION = "How many acres do you wish to plant with seed? (1 bushel per acre)";
   public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
   public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
