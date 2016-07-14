@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class QuestionAskerTest {
+public class AdvisorTest {
 
   public static final String FARMER_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d citizens that can farm 3 acres each. Now then, please give me a number.\n";
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
@@ -28,7 +28,7 @@ public class QuestionAskerTest {
   @Mock
   private PrintStream mockPrintStream;
 
-  private QuestionAsker asker;
+  private Advisor advisor;
   private City city;
 
   @Test
@@ -36,9 +36,9 @@ public class QuestionAskerTest {
     city = new City(10);
     when(mockBufferedReader.readLine()).thenReturn("10");
 
-    asker = new QuestionAsker(mockBufferedReader, System.out);
+    advisor = new Advisor(mockBufferedReader, System.out);
 
-    asker.askHowMuchToUseForFood(city);
+    advisor.askHowMuchToUseForFood(city);
 
     assertThat(city.getBushelsToUseForFood()).isEqualTo(10);
     assertThat(city.getBushelCount()).isEqualTo(0);
@@ -49,9 +49,9 @@ public class QuestionAskerTest {
     city = new City(10);
     when(mockBufferedReader.readLine()).thenReturn("-10", "-5", "10");
 
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowMuchToUseForFood(city);
+    advisor.askHowMuchToUseForFood(city);
 
     verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
     verify(mockPrintStream, times(3)).println(FOOD_QUESTION);
@@ -61,9 +61,9 @@ public class QuestionAskerTest {
   public void shouldAskHowMuchToUseAsFoodIfAnswerIsInvalid() throws Exception {
     city = new City(10);
     when(mockBufferedReader.readLine()).thenReturn("20", "15", "10");
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowMuchToUseForFood(city);
+    advisor.askHowMuchToUseForFood(city);
 
     verify(mockPrintStream, times(3)).println(FOOD_QUESTION);
     verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
@@ -73,9 +73,9 @@ public class QuestionAskerTest {
   public void shouldAskFoodQuestionAgainIfInputIsNonInteger() throws Exception {
     city = new City(10);
     when(mockBufferedReader.readLine()).thenReturn("f", "f", "10");
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowMuchToUseForFood(city);
+    advisor.askHowMuchToUseForFood(city);
 
     verify(mockPrintStream, times(3)).println("How many bushels do you wish to feed your people?");
     verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
@@ -85,9 +85,9 @@ public class QuestionAskerTest {
   public void shouldAskHowMuchToPlant() throws Exception {
     city = new City(50);
     when(mockBufferedReader.readLine()).thenReturn("20");
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowManyBushelsToPlant(city);
+    advisor.askHowManyBushelsToPlant(city);
 
     assertThat(city.getBushelCount()).isEqualTo(30);
     assertThat(city.getBushelsToUseForPlanting()).isEqualTo(20);
@@ -97,9 +97,9 @@ public class QuestionAskerTest {
   public void shouldAskHowMuchToPlantAgainIfAnswerIsInvalid() throws Exception {
     city = new City(10);
     when(mockBufferedReader.readLine()).thenReturn("20", "f", "10");
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowManyBushelsToPlant(city);
+    advisor.askHowManyBushelsToPlant(city);
 
     verify(mockPrintStream, times(3)).println(PLANT_QUESTION);
     verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
@@ -112,9 +112,9 @@ public class QuestionAskerTest {
 
     when(mockBufferedReader.readLine()).thenReturn("10", "4", "3");
 
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowManyBushelsToPlant(city);
+    advisor.askHowManyBushelsToPlant(city);
 
     verify(mockPrintStream, times(3)).println(PLANT_QUESTION);
     verify(mockPrintStream, times(2)).printf(FARMER_CORRECTION_MESSAGE, 1);
@@ -128,9 +128,9 @@ public class QuestionAskerTest {
 
     when(mockBufferedReader.readLine()).thenReturn("15", "11", "10");
 
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowManyBushelsToPlant(city);
+    advisor.askHowManyBushelsToPlant(city);
 
     verify(mockPrintStream, times(3)).println(PLANT_QUESTION);
     verify(mockPrintStream, times(2)).printf(ACREAGE_CORRECTION_MESSAGE, 10);
@@ -144,9 +144,9 @@ public class QuestionAskerTest {
     city = new City(20);
     city.setValueOfLandInBushels(20);
     when(mockBufferedReader.readLine()).thenReturn("-1");
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowMuchLandToTrade(city);
+    advisor.askHowMuchLandToTrade(city);
 
     assertThat(city.getBushelCount()).isEqualTo(40);
     assertThat(city.getAcreage()).isEqualTo(999);
@@ -163,9 +163,9 @@ public class QuestionAskerTest {
     city.setAcreageToFarm(20);
     when(mockBufferedReader.readLine()).thenReturn("-20", "0");
 
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowMuchLandToTrade(city);
+    advisor.askHowMuchLandToTrade(city);
 
     assertThat(city.getBushelCount()).isEqualTo(20);
     assertThat(city.getAcreage()).isEqualTo(20);
@@ -180,9 +180,9 @@ public class QuestionAskerTest {
     city = new City(20);
     city.setValueOfLandInBushels(20);
     when(mockBufferedReader.readLine()).thenReturn("0");
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowMuchLandToTrade(city);
+    advisor.askHowMuchLandToTrade(city);
 
     assertThat(city.getBushelCount()).isEqualTo(20);
     assertThat(city.getAcreage()).isEqualTo(1000);
@@ -196,9 +196,9 @@ public class QuestionAskerTest {
     city = new City(1000);
     city.setValueOfLandInBushels(20);
     when(mockBufferedReader.readLine()).thenReturn("-1010", "-1005", "-1000");
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowMuchLandToTrade(city);
+    advisor.askHowMuchLandToTrade(city);
 
     verify(mockPrintStream, times(3)).println(LAND_QUESTION);
     verify(mockPrintStream, times(2)).printf(ACREAGE_CORRECTION_MESSAGE, 1000);
@@ -209,9 +209,9 @@ public class QuestionAskerTest {
     city = new City(1000);
     city.setValueOfLandInBushels(20);
     when(mockBufferedReader.readLine()).thenReturn("60", "55", "50");
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    asker.askHowMuchLandToTrade(city);
+    advisor.askHowMuchLandToTrade(city);
 
     verify(mockPrintStream, times(3)).println(LAND_QUESTION);
     verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 1000);
@@ -219,9 +219,9 @@ public class QuestionAskerTest {
 
   @Test
   public void shouldRejectNonIntegerInput() throws Exception {
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+    advisor = new Advisor(mockBufferedReader, mockPrintStream);
 
-    boolean isValid = asker.isAnInteger("invalidInput");
+    boolean isValid = advisor.isAnInteger("invalidInput");
 
     assertThat(isValid).isFalse();
   }

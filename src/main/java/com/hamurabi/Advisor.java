@@ -9,7 +9,7 @@ import static java.lang.Integer.valueOf;
 import static java.lang.Math.abs;
 
 
-public class QuestionAsker {
+public class Advisor {
   public static final String FOOD_QUESTION = "How many bushels do you wish to feed your people?";
   public static final String PLANT_QUESTION = "How many acres do you wish to plant with seed? (1 bushel per acre)";
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
@@ -23,7 +23,7 @@ public class QuestionAsker {
   private final PrintStream output;
   private BushelTrader trader;
 
-  public QuestionAsker(BufferedReader bufferedReader, PrintStream out) {
+  public Advisor(BufferedReader bufferedReader, PrintStream out) {
     this.bufferedReader = bufferedReader;
     this.output = out;
     this.trader = new BushelTrader();
@@ -145,5 +145,25 @@ public class QuestionAsker {
 
   public Integer calculateBushelsForPurchaseOfAcres(Integer bushelPerAcre, Integer acresToPurchase) {
     return (bushelPerAcre * acresToPurchase);
+  }
+
+  public void informOfPlague() {
+    output.println("A plague has reduced your population by half! What shall we do!?");
+  }
+
+  public void impeach() {
+    output.println("Due to this extreme mismanagement, you have not only been impeached and thrown out of office, but you have also been declared 'National Fink'!");
+  }
+
+  public void giveYearlyUpdate(City city, Integer yearsRuled) {
+    output.println("\nHammurabi: I beg to report to you,\n");
+    output.printf("In Year %d, %d people starved.\n", yearsRuled, city.getDeathCount());
+    output.printf("%d people came to the city.\n", city.getNewCitizens());
+    output.printf("The city population is now %d.\n", city.getPopulation());
+    output.printf("The city now owns %d acres.\n", city.getAcreage());
+    output.printf("You harvested %d bushels per acre\n", city.getBushelsHarvestedPerAcre());
+    output.printf("Rats ate %d bushels\n", city.getBushelsEatenByRats());
+    output.printf("You now have %d bushels in store\n", city.getBushelCount());
+    output.printf("Land is trading at %d bushels per acre\n", city.getValueOfLandInBushels());
   }
 }
