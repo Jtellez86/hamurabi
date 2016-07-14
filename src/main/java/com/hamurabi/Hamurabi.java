@@ -36,6 +36,11 @@ public class Hamurabi {
         out.println("Due to this extreme mismanagement, you have not only been impeached and thrown out of office, but you have also been declared 'National Fink'!");
         break;
       }
+
+      if(city.isPlague()){
+        out.println("A plague has reduced your population by 50%! What will we do!?");
+        city.setPopulation( (city.getPopulation()/2) );
+      }
     }
     if(!loser)
     printEndGameMessage(city);

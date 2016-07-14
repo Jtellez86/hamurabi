@@ -56,6 +56,11 @@ public class City {
     }
   }
 
+  public boolean isPlague() {
+    Integer chance = randomnesscalculator.calculateRandomnessBetween(1, 4);
+    return chance.equals(1);
+  }
+
   public Integer getBushelCount() {
     return bushelCount;
   }

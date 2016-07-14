@@ -46,4 +46,14 @@ public class CityTest {
 
     assertThat(city.getValueOfLandInBushels()).isEqualTo(20);
   }
+
+  @Test
+  public void shouldBringPlagueUponCity() throws Exception {
+    when(calculator.calculateRandomnessBetween(1, 4)).thenReturn(1);
+    city.setRandomnesscalculator(calculator);
+
+    boolean plague = city.isPlague();
+
+    assertThat(plague).isTrue();
+  }
 }
