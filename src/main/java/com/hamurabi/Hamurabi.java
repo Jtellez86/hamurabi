@@ -56,7 +56,7 @@ public class Hamurabi {
     out.printf("You harvested %d bushels per acre\n", city.getBushelsHarvestedPerAcre());
     out.printf("Rats ate %d bushels\n", city.getBushelsEatenByRats());
     out.printf("You now have %d bushels in store\n", city.getBushelCount());
-    out.printf("Land is trading at %d bushels per acre\n", city.getBushelsHarvestedPerAcre());
+    out.printf("Land is trading at %d bushels per acre\n", city.getValueOfLandInBushels());
   }
 
   public void printEndGameMessage(City city) {
