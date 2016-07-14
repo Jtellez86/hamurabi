@@ -25,7 +25,6 @@ function build {
 function precommit {
   echo '******Checking travis config syntax*******'
   travis lint;
-  echo '******Building*******'
   build;
 }
 
