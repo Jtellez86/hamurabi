@@ -2,8 +2,6 @@ package com.hamurabi;
 
 public class EndGameCalculator {
 
-
-
   public boolean isGameOver(City city){
     boolean isOver = false;
 

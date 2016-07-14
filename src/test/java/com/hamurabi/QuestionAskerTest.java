@@ -18,6 +18,7 @@ public class QuestionAskerTest {
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
   public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
   public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
+  public static final String FOOD_QUESTION = "How many bushels do you wish to feed your people?";
 
   @Mock
   private BufferedReader mockBufferedReader;
@@ -42,6 +43,19 @@ public class QuestionAskerTest {
   }
 
   @Test
+  public void shouldNotAllowNegativeBushelsToUseAsFood() throws Exception {
+    city = new City(10);
+    when(mockBufferedReader.readLine()).thenReturn("-10", "-5", "10");
+
+    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+
+    asker.askHowMuchToUseForFood(city);
+
+    verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
+    verify(mockPrintStream, times(3)).println(FOOD_QUESTION);
+  }
+
+  @Test
   public void shouldAskHowMuchToUseAsFoodIfAnswerIsInvalid() throws Exception {
     city = new City(10);
     when(mockBufferedReader.readLine()).thenReturn("20", "15", "10");
@@ -49,7 +63,7 @@ public class QuestionAskerTest {
 
     asker.askHowMuchToUseForFood(city);
 
-    verify(mockPrintStream, times(3)).println("How many bushels do you wish to feed your people?");
+    verify(mockPrintStream, times(3)).println(FOOD_QUESTION);
     verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
   }
 
@@ -106,6 +120,22 @@ public class QuestionAskerTest {
   }
 
   @Test
+  public void shouldAllowNotSellingOrBuying() throws Exception {
+    city = new City(20);
+    city.setValueOfLandInBushels(20);
+    when(mockBufferedReader.readLine()).thenReturn("0");
+    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+
+    asker.askHowMuchLandToTrade(city);
+
+    assertThat(city.getBushelCount()).isEqualTo(20);
+    assertThat(city.getAcreage()).isEqualTo(1000);
+    assertThat(city.getAcresToTrade()).isEqualTo(0);
+
+    verify(mockPrintStream).println(LAND_QUESTION);
+  }
+
+  @Test
   public void shouldAskHowMuchToTradeAgainWhenGivenIncorrectNegativeAmount() throws Exception {
     city = new City(1000);
     city.setValueOfLandInBushels(20);
@@ -135,17 +165,8 @@ public class QuestionAskerTest {
   public void shouldRejectNonIntegerInput() throws Exception {
     asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
 
-    boolean isValid = asker.isInteger("invalidInput");
+    boolean isValid = asker.isAnInteger("invalidInput");
 
     assertThat(isValid).isFalse();
-  }
-
-  @Test
-  public void shouldNotAllowAllocationAmountGreaterThanSurplus() throws Exception {
-    City city = new City(10);
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
-
-    boolean isValidSavingsAmount = asker.doesCityHaveTheResources(20, city.getBushelCount());
-    assertThat(isValidSavingsAmount).isFalse();
   }
 }
