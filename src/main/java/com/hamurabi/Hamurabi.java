@@ -38,7 +38,7 @@ public class Hamurabi {
       }
 
       if(city.isPlague()){
-        out.println("A plague has reduced your population by 50%! What will we do!?");
+        out.println("A plague has reduced your population by half! What shall we do!?");
         city.setPopulation( (city.getPopulation()/2) );
       }
     }

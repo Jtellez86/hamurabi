@@ -12,9 +12,11 @@ import static java.lang.Math.abs;
 public class QuestionAsker {
   public static final String FOOD_QUESTION = "How many bushels do you wish to feed your people?";
   public static final String PLANT_QUESTION = "How many acres do you wish to plant with seed? (1 bushel per acre)";
-  public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
-  public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
+  public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.\n";
+  public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.\n";
+  public static final String FARMER_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d citizens that can farm 3 acres each. Now then, please give me a number.\n";
+  public static final int ACRES_PER_CITIZEN = 3;
 
   private BufferedReader bufferedReader;
 
@@ -57,13 +59,27 @@ public class QuestionAsker {
         printCorrectionMessage(BUSHEL_CORRECTION_MESSAGE, PLANT_QUESTION, city.getBushelCount());
         stringInput = bufferedReader.readLine();
       }
-      Integer bushelsToUseForPlanting = valueOf(stringInput);
-      if (doesCityHaveTheResources(bushelsToUseForPlanting, city.getBushelCount(), BUSHEL_CORRECTION_MESSAGE, PLANT_QUESTION)) {
-        city.setBushelsToUseForPlanting(bushelsToUseForPlanting);
-        city.setBushelCount(city.getBushelCount() - bushelsToUseForPlanting);
+      Integer landToFarm = valueOf(stringInput);
+      if (doesCityHaveTheResources(landToFarm, city.getBushelCount(), BUSHEL_CORRECTION_MESSAGE, PLANT_QUESTION)
+          && doesCityHaveEnoughFarmers(city.getPopulation(), landToFarm, FARMER_CORRECTION_MESSAGE, PLANT_QUESTION)
+          && doesCityHaveTheResources(landToFarm, city.getAcreage(), ACREAGE_CORRECTION_MESSAGE, PLANT_QUESTION)) {
+
+        city.setBushelsToUseForPlanting(landToFarm);
+        city.setBushelCount(city.getBushelCount() - landToFarm);
+        city.setAcreageToFarm(landToFarm);
         questionAnswered = true;
       }
     }
+  }
+
+  private boolean doesCityHaveEnoughFarmers(Integer population, Integer bushelsToUseForPlanting, String correctionMessage, String question) {
+    Integer acresPopulationCanSupport = population * ACRES_PER_CITIZEN;
+    boolean isThereEnough = acresPopulationCanSupport >= bushelsToUseForPlanting;
+
+    if (!isThereEnough) {
+      printCorrectionMessage(correctionMessage, question, population);
+    }
+    return isThereEnough;
   }
 
   public void askHowMuchLandToTrade(City city) throws IOException {
@@ -98,11 +114,11 @@ public class QuestionAsker {
   }
 
   private boolean isThereEnoughLandToSell(City city, Integer acresToTrade) {
-    return acresToTrade < 0 && doesCityHaveTheResources(abs(acresToTrade), city.getAcreage(), ACREAGE_CORRECTION_MESSAGE, LAND_QUESTION);
+    return acresToTrade < 0 && doesCityHaveTheResources(abs(acresToTrade), ( city.getAcreage() - city.getAcreageToFarm()), ACREAGE_CORRECTION_MESSAGE, LAND_QUESTION);
   }
 
-  private void printCorrectionMessage(String correctionMessage, String question, Integer count) {
-    output.printf(correctionMessage, count);
+  private void printCorrectionMessage(String correctionMessage, String question, Integer actualAmount) {
+    output.printf(correctionMessage, actualAmount);
     output.println(question);
   }
 

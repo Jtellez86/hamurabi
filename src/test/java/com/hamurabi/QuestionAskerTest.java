@@ -15,10 +15,12 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class QuestionAskerTest {
 
+  public static final String FARMER_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d citizens that can farm 3 acres each. Now then, please give me a number.\n";
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
-  public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
-  public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
   public static final String FOOD_QUESTION = "How many bushels do you wish to feed your people?";
+  public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.\n";
+  public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.\n";
+  public static final String PLANT_QUESTION = "How many acres do you wish to plant with seed? (1 bushel per acre)";
 
   @Mock
   private BufferedReader mockBufferedReader;
@@ -99,8 +101,42 @@ public class QuestionAskerTest {
 
     asker.askHowManyBushelsToPlant(city);
 
-    verify(mockPrintStream, times(3)).println("How many acres do you wish to plant with seed? (1 bushel per acre)");
+    verify(mockPrintStream, times(3)).println(PLANT_QUESTION);
     verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 10);
+  }
+
+  @Test
+  public void shouldNotAllow1CitizenToFarmMoreThan3Acres() throws Exception {
+    city = new City(10);
+    city.setPopulation(1);
+
+    when(mockBufferedReader.readLine()).thenReturn("10", "4", "3");
+
+    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+
+    asker.askHowManyBushelsToPlant(city);
+
+    verify(mockPrintStream, times(3)).println(PLANT_QUESTION);
+    verify(mockPrintStream, times(2)).printf(FARMER_CORRECTION_MESSAGE, 1);
+  }
+
+  @Test
+  public void shouldNotAllowPlantingIfNotEnoughAcres() throws Exception {
+    city = new City(15);
+    city.setPopulation(5);
+    city.setAcreage(10);
+
+    when(mockBufferedReader.readLine()).thenReturn("15", "11", "10");
+
+    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+
+    asker.askHowManyBushelsToPlant(city);
+
+    verify(mockPrintStream, times(3)).println(PLANT_QUESTION);
+    verify(mockPrintStream, times(2)).printf(ACREAGE_CORRECTION_MESSAGE, 10);
+
+    assertThat(city.getAcreageToFarm()).isEqualTo(10);
+    assertThat(city.getAcreage()).isEqualTo(10);
   }
 
   @Test
@@ -120,7 +156,27 @@ public class QuestionAskerTest {
   }
 
   @Test
-  public void shouldAllowNotSellingOrBuying() throws Exception {
+  public void shouldNotAllowTradingLandIfLandIsBeingUsedToFarm() throws Exception {
+    city = new City(20);
+    city.setValueOfLandInBushels(20);
+    city.setAcreage(20);
+    city.setAcreageToFarm(20);
+    when(mockBufferedReader.readLine()).thenReturn("-20", "0");
+
+    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+
+    asker.askHowMuchLandToTrade(city);
+
+    assertThat(city.getBushelCount()).isEqualTo(20);
+    assertThat(city.getAcreage()).isEqualTo(20);
+    assertThat(city.getAcresToTrade()).isEqualTo(0);
+
+    verify(mockPrintStream, times(2)).println(LAND_QUESTION);
+    verify(mockPrintStream, times(1)).printf(ACREAGE_CORRECTION_MESSAGE, 0);
+  }
+
+  @Test
+  public void shouldAllowNotTrading() throws Exception {
     city = new City(20);
     city.setValueOfLandInBushels(20);
     when(mockBufferedReader.readLine()).thenReturn("0");

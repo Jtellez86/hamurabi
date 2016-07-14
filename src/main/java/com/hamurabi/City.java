@@ -19,6 +19,7 @@ public class City {
   private RoundUpdater updater;
   private RandomnessCalculator randomnesscalculator;
   private StarvationCalculator starvationCalculator;
+  private Integer acreageToFarm;
 
   public City(Integer startingBushels) {
     this.bushelCount = startingBushels;
@@ -29,6 +30,7 @@ public class City {
     this.deathCount = 0;
     this.newCitizens = 0;
     this.acresToTrade = 0;
+    this.acreageToFarm = 0;
     this.updater = new RoundUpdater();
     this.randomnesscalculator = new RandomnessCalculator();
     this.starvationCalculator = new StarvationCalculator();
@@ -159,5 +161,13 @@ public class City {
 
   public void setDeathCount(Integer deathCount) {
     this.deathCount = deathCount;
+  }
+
+  public Integer getAcreageToFarm() {
+    return acreageToFarm;
+  }
+
+  public void setAcreageToFarm(Integer acreageToFarm) {
+    this.acreageToFarm = acreageToFarm;
   }
 }
