@@ -46,4 +46,13 @@ public class BushelTraderTest {
     assertThat(city.getBushelCount()).isEqualTo(40);
     verify(mockedPrintStream, times(0)).println(anyString());
   }
+
+  @Test
+  public void shouldNotAllowNegativeBushels(){
+    trader.sellAcreage(1, city);
+
+    assertThat(city.getAcreage()).isEqualTo(999);
+    assertThat(city.getBushelCount()).isEqualTo(40);
+    verify(mockedPrintStream, times(0)).println(anyString());
+  }
 }

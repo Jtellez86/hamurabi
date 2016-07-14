@@ -11,8 +11,8 @@ public class RoundUpdater {
   }
 
   public void updateBushelCountWithHarvest(City city) {
-    Integer bushelsHarvested = city.getBushelsToUseForPlanting() * city.getBushelsPerAcre();
-    city.setBushelsHarvested(bushelsHarvested);
+    Integer bushelsHarvested = city.getBushelsToUseForPlanting() * city.getBushelsHarvestedPerAcre();
+    city.setTotalBushelsHarvested(bushelsHarvested);
     city.setBushelCount(city.getBushelCount() + bushelsHarvested);
   }
 }

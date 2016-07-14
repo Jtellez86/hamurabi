@@ -11,8 +11,8 @@ import static java.lang.Math.abs;
 public class QuestionAsker {
   public static final String FOOD_QUESTION = "How many bushels do you wish to feed your people?";
   public static final String PLANT_QUESTION = "How many acres do you wish to plant with seed?";
-  public static final String BUSHEL_CORRECTION_MESSAGE = "com.hamurabi.Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
-  public static final String ACREAGE_CORRECTION_MESSAGE = "com.hamurabi.Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
+  public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
+  public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
 
   private BufferedReader bufferedReader;
@@ -79,15 +79,23 @@ public class QuestionAsker {
         stringInput = bufferedReader.readLine();
       }
       Integer acresToTrade = Integer.valueOf(stringInput);
-      if (doesCityHaveTheResources(abs(acresToTrade), city.getAcreage())) {
-        if (acresToTrade < 0) {
+      if (acresToTrade < 0) {
+        if (doesCityHaveTheResources(abs(acresToTrade), city.getAcreage())) {
           trader.sellAcreage(abs(acresToTrade), city);
-        } else {
-          trader.buyAcreage(acresToTrade, city);
+          questionAnswered = true;
         }
-        questionAnswered = true;
-      } else {
-        printCorrectionMessage(ACREAGE_CORRECTION_MESSAGE, LAND_QUESTION, city.getBushelCount());
+        else{
+          printCorrectionMessage(ACREAGE_CORRECTION_MESSAGE, LAND_QUESTION, city.getBushelCount());
+        }
+      }
+      else {
+        if (doesCityHaveTheResources(calculateBushelsForPurchaseOfAcres(city.getValueOfLandInBushels(), acresToTrade), city.getBushelCount())) {
+          trader.buyAcreage(acresToTrade, city);
+          questionAnswered = true;
+        }
+        else{
+          printCorrectionMessage(BUSHEL_CORRECTION_MESSAGE, LAND_QUESTION, city.getBushelCount());
+        }
       }
     }
   }
@@ -110,5 +118,9 @@ public class QuestionAsker {
 
   public boolean doesCityHaveTheResources(Integer requested, Integer available) {
     return available >= requested;
+  }
+
+  public Integer calculateBushelsForPurchaseOfAcres(Integer bushelPerAcre, Integer acresToPurchase) {
+    return (bushelPerAcre * acresToPurchase);
   }
 }

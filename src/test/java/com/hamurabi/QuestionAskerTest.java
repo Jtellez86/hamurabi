@@ -16,8 +16,8 @@ import static org.mockito.Mockito.*;
 public class QuestionAskerTest {
 
   public static final String LAND_QUESTION = "How many acres do you wish to buy or sell?(enter a negative amount to sell acres for bushels)";
-  public static final String BUSHEL_CORRECTION_MESSAGE = "com.hamurabi.Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
-  public static final String ACREAGE_CORRECTION_MESSAGE = "com.hamurabi.Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
+  public static final String BUSHEL_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d bushels of grain. Now then, please give me a number.%n";
+  public static final String ACREAGE_CORRECTION_MESSAGE = "Hamurabi: think again, o mighty master, you have only %d acres of land. Now then, please give me a number.%n";
 
   @Mock
   private BufferedReader mockBufferedReader;
@@ -106,19 +106,6 @@ public class QuestionAskerTest {
   }
 
   @Test
-  public void shouldAskHowMuchToTradeAgainWhenGivenIncorrectPositiveAmount() throws Exception {
-    city = new City(1000);
-    city.setValueOfLandInBushels(20);
-    when(mockBufferedReader.readLine()).thenReturn("1010", "1005", "1000");
-    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
-
-    asker.askHowMuchLandToTrade(city);
-
-    verify(mockPrintStream, times(3)).println(LAND_QUESTION);
-    verify(mockPrintStream, times(2)).printf(ACREAGE_CORRECTION_MESSAGE, 1000);
-  }
-
-  @Test
   public void shouldAskHowMuchToTradeAgainWhenGivenIncorrectNegativeAmount() throws Exception {
     city = new City(1000);
     city.setValueOfLandInBushels(20);
@@ -129,6 +116,19 @@ public class QuestionAskerTest {
 
     verify(mockPrintStream, times(3)).println(LAND_QUESTION);
     verify(mockPrintStream, times(2)).printf(ACREAGE_CORRECTION_MESSAGE, 1000);
+  }
+
+  @Test
+  public void shouldNotAllowPurchaseOfLandWithInsufficientBushels() throws Exception {
+    city = new City(1000);
+    city.setValueOfLandInBushels(20);
+    when(mockBufferedReader.readLine()).thenReturn("60", "55", "50");
+    asker = new QuestionAsker(mockBufferedReader, mockPrintStream);
+
+    asker.askHowMuchLandToTrade(city);
+
+    verify(mockPrintStream, times(3)).println(LAND_QUESTION);
+    verify(mockPrintStream, times(2)).printf(BUSHEL_CORRECTION_MESSAGE, 1000);
   }
 
   @Test

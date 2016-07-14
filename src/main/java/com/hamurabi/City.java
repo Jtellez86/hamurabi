@@ -11,8 +11,8 @@ public class City {
   private Integer newCitizens;
   private Integer bushelsEatenByRats;
   private Integer valueOfLandInBushels;
-  private Integer bushelsHarvested;
-  private Integer bushelsPerAcre;
+  private Integer totalBushelsHarvested;
+  private Integer bushelsHarvestedPerAcre;
   private Integer acresToTrade;
   private RoundUpdater updater;
   private RandomnessCalculator randomnesscalculator;
@@ -39,7 +39,7 @@ public class City {
     this.setBushelsEatenByRats(randomnesscalculator.calculateRandomnessBetween(0, 200));
     updater.subtractRatLoss(this);
 
-    this.setBushelsPerAcre(randomnesscalculator.calculateRandomnessBetween(1, 5));
+    this.setBushelsHarvestedPerAcre(randomnesscalculator.calculateRandomnessBetween(1, 5));
     updater.updateBushelCountWithHarvest(this);
 
     this.setValueOfLandInBushels(randomnesscalculator.calculateRandomnessBetween(17, 26));
@@ -97,12 +97,12 @@ public class City {
     return valueOfLandInBushels;
   }
 
-  public Integer getBushelsHarvested() {
-    return bushelsHarvested;
+  public Integer getTotalBushelsHarvested() {
+    return totalBushelsHarvested;
   }
 
-  public void setBushelsHarvested(Integer bushelsHarvested) {
-    this.bushelsHarvested = bushelsHarvested;
+  public void setTotalBushelsHarvested(Integer totalBushelsHarvested) {
+    this.totalBushelsHarvested = totalBushelsHarvested;
   }
 
   public Integer getBushelsToUseForFood() {
@@ -117,12 +117,12 @@ public class City {
     this.bushelsToUseForFood = bushelsToSaveForFood;
   }
 
-  public Integer getBushelsPerAcre() {
-    return this.bushelsPerAcre;
+  public Integer getBushelsHarvestedPerAcre() {
+    return this.bushelsHarvestedPerAcre;
   }
 
-  public void setBushelsPerAcre(Integer bushelsPerAcre) {
-    this.bushelsPerAcre = bushelsPerAcre;
+  public void setBushelsHarvestedPerAcre(Integer bushelsHarvestedPerAcre) {
+    this.bushelsHarvestedPerAcre = bushelsHarvestedPerAcre;
   }
 
   public void setRandomnesscalculator(RandomnessCalculator randomnesscalculator) {

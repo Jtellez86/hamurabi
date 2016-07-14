@@ -22,9 +22,10 @@ public class Hamurabi {
   }
 
   public void runGameLoop() throws IOException{
-    city.startYear();
     for(int year= 1; year < 11; year++){
+      city.startYear();
       printMOTY(city, year);
+
       asker.askHowMuchToUseForFood(city);
       asker.askHowManyBushelsToPlant(city);
       asker.askHowMuchLandToTrade(city);
@@ -52,10 +53,10 @@ public class Hamurabi {
     out.printf("%d people came to the city.\n", city.getNewCitizens());
     out.printf("The city population is now %d.\n", city.getPopulation());
     out.printf("The city now owns %d acres.\n", city.getAcreage());
-    out.printf("You harvested %d bushels per acre\n", city.getBushelsPerAcre());
+    out.printf("You harvested %d bushels per acre\n", city.getBushelsHarvestedPerAcre());
     out.printf("Rats ate %d bushels\n", city.getBushelsEatenByRats());
     out.printf("You now have %d bushels in store\n", city.getBushelCount());
-    out.printf("Land is trading at %d bushels per acre\n", city.getValueOfLandInBushels());
+    out.printf("Land is trading at %d bushels per acre\n", city.getBushelsHarvestedPerAcre());
   }
 
   public void printEndGameMessage(City city) {
