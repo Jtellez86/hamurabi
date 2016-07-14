@@ -20,6 +20,7 @@ public class Hamurabi {
   }
 
   public void runGameLoop() throws IOException {
+    boolean loser = false;
     for (int year = 1; year < 11; year++) {
       city.startYear();
       printMOTY(city, year);
@@ -35,10 +36,12 @@ public class Hamurabi {
       }
 
       if (endGame.isGameOver(city)) {
+        loser = true;
         out.println("Due to this extreme mismanagement, you have not only been impeached and thrown out of office, but you have also been declared 'National Fink'!");
         break;
       }
     }
+    if(!loser)
     printEndGameMessage(city);
   }
 
